@@ -32,15 +32,21 @@ export const signup = async (req, res) => {
             password: hashedPassword,
         })
 
-        if (newUser) { 
-            generateToken(newUser._id, res);
-            await newUser.save();
-            res.status(201).json({  // 201 => Something created Successfully and sendinf it back to client
-                _id: newUser._id,
-                fullName: newUser.fullName,
-                email: newUser.email,
-                profilePic: newUser.profilePic,
-            })
+        if (newUser) {
+          // generateToken(newUser._id, res);
+          // await newUser.save();
+
+          // this way will presist user first then issue auth cookie
+          const savedUser = await newUser.save();
+          generateToken(savedUser._id, res);
+
+          res.status(201).json({
+            // 201 => Something created Successfully and sendinf it back to client
+            _id: newUser._id,
+            fullName: newUser.fullName,
+            email: newUser.email,
+            profilePic: newUser.profilePic,
+          });
         }
         else {
             res.status(400).json({ message: "Invalid User Data" });
