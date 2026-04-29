@@ -2,7 +2,6 @@ import { create } from "zustand";
 import { toast } from "react-hot-toast";
 import { axiosInstance } from "../lib/axios";
 
-
 export const useChatStore = create((set, get) => ({
   //states that will be used in the chat component
   allContacts: [],
@@ -13,7 +12,7 @@ export const useChatStore = create((set, get) => ({
   isUserLoading: false,
   isMessagesLoading: false,
   isSoundEnabled: JSON.parse(localStorage.getItem("isSoundEnabled")) === true,
-//functions that will be used in the chat component
+  //functions that will be used in the chat component
   toggleSound: () => {
     localStorage.setItem("isSoundEnabled", !get().isSoundEnabled);
     set({ isSoundEnabled: !get().isSoundEnabled });
@@ -33,7 +32,7 @@ export const useChatStore = create((set, get) => ({
     }
   },
   getMyChatPartners: async () => {
-    set({ isUserLoading: true })
+    set({ isUserLoading: true });
     try {
       const res = await axiosInstance.get("/messages/chats");
       set({ chats: res.data });
@@ -41,6 +40,18 @@ export const useChatStore = create((set, get) => ({
       toast.error(error.response.data.message);
     } finally {
       set({ isUserLoading: false });
+    }
+  },
+
+  getMessagesByUserId: async (userId) => {
+    set({ isMessagesLoading: true });
+    try {
+      const res = await axiosInstance.get(`/messages/${userId}`);
+      set({ messages: res.data });
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to load messages");
+    } finally {
+      set({ isMessagesLoading: false });
     }
   },
 }));
