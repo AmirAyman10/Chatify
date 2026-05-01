@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { toast } from "react-hot-toast";
 import { axiosInstance } from "../lib/axios";
+import axios from "axios";
+import { useAuthStore } from "./useAuthStore";
 
 export const useChatStore = create((set, get) => ({
   //states that will be used in the chat component
@@ -52,6 +54,33 @@ export const useChatStore = create((set, get) => ({
       toast.error(error.response?.data?.message || "Failed to load messages");
     } finally {
       set({ isMessagesLoading: false });
+    }
+  },
+  sendMessage: async (messageData) => {
+    const { selectedUser, messages } = get();
+    const { authUser } = useAuthStore.getState();
+
+    // Show the message immediately in the UI
+    const tempId = `temp-${Date.now()}`; // Generate a temporary ID for the optimistic message
+    const optimisticMessage = {
+      _id: tempId,
+      senderId: authUser._id,
+      receiverId: selectedUser._id,
+      text: messageData.text,
+      image: messageData.image,
+      createdAt: new Date().toISOString(),
+      isOptimistic: true, 
+    };
+    set({messages:[...messages, optimisticMessage]}); // Add the optimistic message to the state
+    try {
+      const res = await axiosInstance.post(
+        `/messages/send/${selectedUser._id}`,
+        messageData,
+      );
+      set({ messages: messages.concat(res.data) }); // add the new messages to the existing messages
+    } catch (error) {
+      set({messages:messages}) // optimistic message removed on failure
+      toast.error(error.response?.data?.message || "Failed to send message");
     }
   },
 }));
