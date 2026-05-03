@@ -25,8 +25,8 @@ A full-stack real-time chat application built with the MERN stack, featuring ins
 | ![Sign Up](./screenshot/signup.png) | ![Login](./screenshot/login.png) |
 
 | Chat |  
-|-------------|---------|
-| ![Chat](./screenshot/chat.png) | ![](./screenshot/chat2.png) |
+
+ ![Chat](./screenshot/chat.png) | ![](./screenshot/chat2.png) 
 
 ## 🛠️ Tech Stack
 
@@ -64,11 +64,12 @@ A full-stack real-time chat application built with the MERN stack, featuring ins
 - Arcjet account
 
 #Installation
--git clone https://github.com/your-username/chatify.git 
--cd chatify
--npm install 
--cd frontend && npm install
--cd ../backend && npm install
+```bash
+git clone https://github.com/your-username/chatify.git
+cd chatify
+cd frontend && npm install
+cd ../backend && npm install
+```
 # run servers cd backend && npm run dev cd frontend && npm run dev
 # before running the app, create backend/.env:
 -MONGO_URI=...
