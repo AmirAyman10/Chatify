@@ -1,6 +1,7 @@
 import Message from "../models/Message.js";
 import User from "../models/User.js";
 import cloudinary from "../lib/cloudinary.js";
+import { io, getReceiverSocketId } from "../lib/socket.js";
 
 export const getAllContacts = async (req, res) => {
   try {
@@ -67,6 +68,10 @@ export const sendMessage = async (req, res) => {
     });
     await newMessage.save();
     // send message in real-time if user is online -socket.io
+    const recieverSocketId = getReceiverSocketId(receiverId);
+    if (recieverSocketId) {  // if user is online, send real-time message
+      io.to(recieverSocketId).emit("newMessage", newMessage);
+    }
     res.status(201).json(newMessage);
   } catch (error) {
     console.error("Error in sendMessage controller:", error);

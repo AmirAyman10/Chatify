@@ -4,6 +4,7 @@ import { axiosInstance } from "../lib/axios";
 import axios from "axios";
 import { useAuthStore } from "./useAuthStore";
 
+
 export const useChatStore = create((set, get) => ({
   //states that will be used in the chat component
   allContacts: [],
@@ -82,5 +83,32 @@ export const useChatStore = create((set, get) => ({
       set({messages:messages}) // optimistic message removed on failure
       toast.error(error.response?.data?.message || "Failed to send message");
     }
+  },
+
+  subscribeToMessages: () => { 
+    const { selectedUser, isSoundEnabled } = get();
+    if (!selectedUser) return; // if no user is selected so no new messages received
+    
+    const socket = useAuthStore.getState().socket;
+
+    socket.on("newMessage", (newMessage) => {
+      const isMessageSentFromSelectedUser = newMessage.senderId === selectedUser._id;
+      if (!isMessageSentFromSelectedUser) return; // if the new message is not from the selected user, ignore it
+
+      const currentMessages = get().messages;
+      set({ messages: [...currentMessages, newMessage] }); // add the new message to the existing messages
+      
+      if (isSoundEnabled) {
+        const NotificationSound = new Audio("/sound/notification.mp3");
+        NotificationSound.currentTime = 0; // reset sound to start
+        NotificationSound.play().catch((e) => console.log("Audio play failed:", e));
+      }
+      })
+
+  },
+
+  unsubscribeFromMessages: () => { 
+    const socket = useAuthStore.getState().socket;
+    socket.off("newMessage");
   },
 }));
