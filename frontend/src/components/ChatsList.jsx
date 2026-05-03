@@ -25,7 +25,6 @@ function ChatsList() {
           onClick={() => setSelectedUser(chat)}
         >
           <div className="flex items-center gap-3">
-            {/* TODO: Add online status indicator with socket */}
             <div
               className={`avatar ${onlineUsers.includes(chat._id) ? "online" : "offline"}`}
             >
