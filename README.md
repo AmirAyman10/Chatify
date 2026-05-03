@@ -77,7 +77,7 @@ cd ../backend && npm install
 
 
 ## 📬 Contact
-- Email: amirayman555@email.com
+- Email: amirayman555@gmail.com
 
 ⭐ If you found this project helpful, please give it a star!
 
