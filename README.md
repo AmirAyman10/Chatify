@@ -63,7 +63,7 @@ A full-stack real-time chat application built with the MERN stack, featuring ins
 - Resend account
 - Arcjet account
 
-#Installation
+# Installation
 ```bash
 git clone https://github.com/your-username/chatify.git
 cd chatify
