@@ -24,9 +24,9 @@ A full-stack real-time chat application built with the MERN stack, featuring ins
 |--------|-----------|
 | ![Sign Up](./screenshot/signup.png) | ![Login](./screenshot/login.png) |
 
-| Chat |  
-
- ![Chat](./screenshot/chat.png) | ![](./screenshot/chat2.png) 
+| Chat | Start Chating  |
+|--------|-----------|
+| ![Chat](./screenshot/chat.png) | ![Start Chating ](./screenshot/chat2.png) |
 
 ## 🛠️ Tech Stack
 
